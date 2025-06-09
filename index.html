@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naija Strategy Games - Telegram Mini App</title>
+    <link rel="stylesheet" href="css/ui-kit.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="app" class="telegram-app">
+        <!-- Header -->
+        <div class="app-header">
+            <div class="user-info">
+                <div class="user-balance">
+                    <i class="fas fa-star"></i>
+                    <span id="user-stars">100</span> Stars
+                </div>
+                <div class="user-stats">
+                    <span class="xp-display">XP: <span id="user-xp">0</span></span>
+                    <span class="vip-badge" id="vip-level">VIP 1</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div id="main-content" class="main-content">
+            <!-- Main Menu Screen -->
+            <div id="main-menu" class="screen active">
+                <div class="welcome-section">
+                    <h1>🎮 Naija Strategy Games</h1>
+                    <p class="subtitle">Vote smart, win big! 🇳🇬</p>
+                </div>
+
+                <div class="game-modes">
+                    <div class="bb-button primary large" onclick="startGame('majority')">
+                        <div class="game-mode-content">
+                            <div class="mode-icon">🟩</div>
+                            <div class="mode-info">
+                                <h3>Elect Majority</h3>
+                                <p>Vote for the most popular choice</p>
+                                <span class="entry-fee">Entry: 3 Stars</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bb-button secondary large disabled" onclick="showComingSoon('minority')">
+                        <div class="game-mode-content">
+                            <div class="mode-icon">🟦</div>
+                            <div class="mode-info">
+                                <h3>Elect Minority</h3>
+                                <p>Vote for the least popular choice</p>
+                                <span class="entry-fee">Coming Soon</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bb-button secondary large disabled" onclick="showComingSoon('market')">
+                        <div class="game-mode-content">
+                            <div class="mode-icon">🟥</div>
+                            <div class="mode-info">
+                                <h3>Influence Market</h3>
+                                <p>Strategic voting with live stats</p>
+                                <span class="entry-fee">Coming Soon</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <div class="bb-button success" onclick="claimDailyBonus()">
+                        <i class="fas fa-gift"></i>
+                        <span id="daily-bonus-text">Claim Daily Bonus</span>
+                    </div>
+                    
+                    <div class="bb-button info" onclick="showVIPScreen()">
+                        <i class="fas fa-crown"></i>
+                        VIP Status & Rewards
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Screen -->
+            <div id="game-screen" class="screen">
+                <div class="game-header">
+                    <div class="game-title">
+                        <h2 id="game-mode-title">🟩 Elect Majority</h2>
+                        <p id="game-instructions">Vote for the word you think will get the most votes!</p>
+                    </div>
+                    
+                    <div class="game-stats">
+                        <div class="timer-display">
+                            <i class="fas fa-clock"></i>
+                            <span id="countdown-timer">3:00</span>
+                        </div>
+                        <div class="prize-pool">
+                            <i class="fas fa-trophy"></i>
+                            Prize Pool: <span id="prize-pool">0</span> Stars
+                        </div>
+                    </div>
+                </div>
+
+                <div class="voting-options" id="voting-options">
+                    <!-- Vote options will be populated by JavaScript -->
+                </div>
+
+                <div class="game-actions">
+                    <div class="bb-button warning" onclick="confirmRevote()" id="revote-btn" style="display: none;">
+                        <i class="fas fa-redo"></i>
+                        <span id="revote-text">Revote (2 Stars)</span>
+                    </div>
+                    
+                    <div class="bb-button secondary" onclick="returnToMenu()">
+                        <i class="fas fa-home"></i>
+                        Back to Menu
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Screen -->
+            <div id="result-screen" class="screen">
+                <div class="result-content">
+                    <div class="result-header">
+                        <h2 id="result-title">🎉 Game Results</h2>
+                    </div>
+
+                    <div class="result-details">
+                        <div class="winning-choice">
+                            <h3>Winning Word:</h3>
+                            <div class="winner-display" id="winning-word">Lion</div>
+                        </div>
+
+                        <div class="user-choice">
+                            <h3>Your Choice:</h3>
+                            <div class="choice-display" id="user-choice">Hope</div>
+                        </div>
+
+                        <div class="outcome" id="outcome-display">
+                            <!-- Win/Loss status will be populated -->
+                        </div>
+
+                        <div class="rewards">
+                            <div class="reward-item">
+                                <i class="fas fa-star"></i>
+                                <span>Stars Won: <span id="stars-won">0</span></span>
+                            </div>
+                            <div class="reward-item">
+                                <i class="fas fa-bolt"></i>
+                                <span>XP Gained: <span id="xp-gained">5</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-actions">
+                        <div class="bb-button primary large" onclick="startGame('majority')">
+                            <i class="fas fa-play"></i>
+                            Play Again
+                        </div>
+                        
+                        <div class="bb-button secondary" onclick="returnToMenu()">
+                            <i class="fas fa-home"></i>
+                            Main Menu
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIP Screen -->
+            <div id="vip-screen" class="screen">
+                <div class="vip-content">
+                    <div class="vip-header">
+                        <h2><i class="fas fa-crown"></i> VIP Status</h2>
+                    </div>
+
+                    <div class="current-level">
+                        <div class="level-display" id="current-vip-level">VIP Level 1</div>
+                        <div class="xp-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="xp-progress-bar"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span id="current-xp">0</span> / <span id="next-level-xp">100</span> XP
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vip-benefits">
+                        <h3>Current Benefits:</h3>
+                        <ul id="current-benefits">
+                            <li>✨ Basic game access</li>
+                            <li>🎁 Daily bonus eligible</li>
+                        </ul>
+
+                        <h3>Next Level Benefits:</h3>
+                        <ul id="next-benefits">
+                            <li>⚡ +20% XP bonus</li>
+                            <li>💎 Premium game modes</li>
+                        </ul>
+                    </div>
+
+                    <div class="vip-actions">
+                        <div class="bb-button secondary" onclick="returnToMenu()">
+                            <i class="fas fa-arrow-left"></i>
+                            Back to Menu
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay" style="display: none;">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading...</p>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast-container" class="toast-container"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/storage.js"></script>
+    <script src="js/ui-components.js"></script>
+    <script src="js/games.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
